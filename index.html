@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ephamora — NYC Ephemera</title>
+    <style>@import url("https://use.typekit.net/sfz3pyh.css");</style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+<nav class="filters">
+                <a href="#" class="filter-link active">ALL</a>
+                <a href="#" class="filter-link">POSTCARD</a>
+                <a href="#" class="filter-link">MATCHBOX</a>
+                <a href="#" class="filter-link">STICKER</a>
+                <a href="#" class="filter-link">OTHER</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="grid-inner">
+        <div class="grid">
+            <div class="card"><img src="manhatta 1.jpg" alt="Manhatta 1"></div>
+            <div class="card"><img src="heros.jpg" alt="Heroes"></div>
+            <div class="card"><img src="monkey bar.jpg" alt="Monkey Bar"></div>
+            <div class="card"><img src="The Corner Store.jpg" alt="The Corner Store"></div>
+            <div class="card"><img src="polo bar.jpg" alt="Polo Bar"></div>
+            <div class="card"><img src="deux chats.jpg" alt="Deux Chats"></div>
+            <div class="card"><img src="The Standard.jpg" alt="The Standard"></div>
+            <div class="card"><img src="manhatta 3.jpg" alt="Manhatta 3"></div>
+            <div class="card"><img src="bar madonna.jpg" alt="Bar Madonna"></div>
+            <div class="card"><img src="jefrey's grocery.jpg" alt="Jeffrey's Grocery"></div>
+            <div class="card"><img src="manhatta 2.jpg" alt="Manhatta 2"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        </div>
+    </main>
+
+
+<script>
+    document.querySelectorAll('.filter-link').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            document.querySelectorAll('.filter-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>
