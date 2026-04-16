@@ -83,6 +83,7 @@ font-weight: 400;
 
 .filter-link.active {
     color: #f39005;
+    border-bottom: #f39005 solid 0.5px;
 }
 
 /* ── cards ── */
@@ -144,6 +145,10 @@ main {
     pointer-events: none;
 }
 
+.card.flipped::before {
+    display: none;
+}
+
 /* ── Detail panel ── */
 
 .detail {
@@ -191,4 +196,167 @@ main {
 font-weight: 400;
 font-style: normal;
     color: #f39005;
+}
+
+/* ── Submit card ── */
+
+.card-submit {
+    counter-increment: none;
+}
+
+.card-submit::before {
+    display: none;
+}
+
+.submit-plus {
+    font-size: 50px;
+    color: #f3900546;
+    transition: color 0.15s ease;
+    line-height: 1;
+}
+
+.card-submit:hover .submit-plus {
+    color: #f39005;
+}
+
+/* ── Modal ── */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal {
+    width: 75vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #f3900546;
+    position: relative;
+    background: #000;
+}
+
+/* Submit button — small square top right */
+.form-submit {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: none;
+    border: 1px solid #f3900546;
+    transition: border-color 0.15s ease;
+}
+
+.form-submit:hover {
+    border-color: #f39005;
+}
+
+/* Left — upload */
+.modal-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#form-image {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.upload-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.7);
+}
+
+.upload-sub {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.8;
+}
+
+/* Divider */
+.modal-divider {
+    width: 1px;
+    background: #f3900546;
+    margin: 40px 0;
+}
+
+/* Right — fields */
+.modal-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-bottom: 1px solid #f3900546;
+    padding-bottom: 4px;
+}
+
+.form-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.9);
+}
+
+.form-label-opt {
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+}
+
+.form-input {
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    width: 100%;
+    padding: 4px 0;
+}
+
+.form-input option {
+    background: #000;
+}
+
+select.form-input {
+    appearance: none;
+    -webkit-appearance: none;
 }

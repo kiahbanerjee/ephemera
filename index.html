@@ -26,64 +26,71 @@
     <main>
         <div class="grid-inner">
         <div class="grid">
-            <div class="card" data-object="Postcard" data-location="Manhattan" data-price="NA" data-by="NA" data-note=""><img src="manhatta 1.jpg" alt="Manhatta 1"></div>
-            <div class="card" data-object="Matchbox" data-location="SoHo" data-price="NA" data-by="NA" data-note=""><img src="heros.jpg" alt="Heroes"></div>
-            <div class="card" data-object="Matchbox" data-location="Upper East Side" data-price="NA" data-by="NA" data-note=""><img src="monkey bar.jpg" alt="Monkey Bar"></div>
+            <div class="card card-submit" id="submit-card">
+                <span class="submit-plus">+</span>
+            </div>
+            <div class="card" data-object="Matchbox" data-location="Manhattan" data-price="NA" data-by="NA" data-note=""><img src="manhatta 1.jpg" alt="Manhatta 1"></div>
+            <div class="card" data-object="Postcard" data-location="SoHo" data-price="NA" data-by="NA" data-note=""><img src="heros.jpg" alt="Heroes"></div>
+            <div class="card" data-object="Postcard" data-location="Upper East Side" data-price="NA" data-by="NA" data-note=""><img src="monkey bar.jpg" alt="Monkey Bar"></div>
             <div class="card" data-object="Matchbox" data-location="Broadway" data-price="NA" data-by="NA" data-note=""><img src="The Corner Store.jpg" alt="The Corner Store"></div>
-            <div class="card" data-object="Matchbox" data-location="Midtown" data-price="NA" data-by="NA" data-note=""><img src="polo bar.jpg" alt="Polo Bar"></div>
+            <div class="card" data-object="Postcard" data-location="Midtown" data-price="NA" data-by="NA" data-note=""><img src="polo bar.jpg" alt="Polo Bar"></div>
             <div class="card" data-object="Matchbox" data-location="West Village" data-price="NA" data-by="NA" data-note=""><img src="deux chats.jpg" alt="Deux Chats"></div>
-            <div class="card" data-object="Matchbox" data-location="Meatpacking" data-price="NA" data-by="NA" data-note=""><img src="The Standard.jpg" alt="The Standard"></div>
+            <div class="card" data-object="Postcard" data-location="Meatpacking" data-price="NA" data-by="NA" data-note=""><img src="The Standard.jpg" alt="The Standard"></div>
             <div class="card" data-object="Postcard" data-location="Manhattan" data-price="NA" data-by="NA" data-note=""><img src="manhatta 3.jpg" alt="Manhatta 3"></div>
-            <div class="card" data-object="Sticker" data-location="Lower East Side" data-price="NA" data-by="NA" data-note=""><img src="bar madonna.jpg" alt="Bar Madonna"></div>
+            <div class="card" data-object="Matchbox" data-location="Lower East Side" data-price="NA" data-by="NA" data-note=""><img src="bar madonna.jpg" alt="Bar Madonna"></div>
             <div class="card" data-object="Matchbox" data-location="West Village" data-price="NA" data-by="NA" data-note=""><img src="jefrey's grocery.jpg" alt="Jeffrey's Grocery"></div>
-            <div class="card" data-object="Postcard" data-location="Manhattan" data-price="NA" data-by="NA" data-note=""><img src="manhatta 2.jpg" alt="Manhatta 2"></div>
+            <div class="card" data-object="Matchbox" data-location="Manhattan" data-price="NA" data-by="NA" data-note=""><img src="manhatta 2.jpg" alt="Manhatta 2"></div>
         </div>
         </div>
     </main>
 
 
-<script>
-    // Filter links
-    document.querySelectorAll('.filter-link').forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            document.querySelectorAll('.filter-link').forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        });
-    });
+<!-- Submission -->
+<div class="modal-overlay" id="modal-overlay">
+    <form class="modal" id="submit-form">
+        <button type="submit" class="form-submit" title="Submit"></button>
 
-    // Build detail panels and toggle on click
-    document.querySelectorAll('.card').forEach(card => {
-        const detail = document.createElement('div');
-        detail.className = 'detail';
-        detail.innerHTML = `
-            <div class="detail-row">
-                <span class="detail-label">OBJECT:</span>
-                <span class="detail-value">${card.dataset.object || 'NA'}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">LOCATION:</span>
-                <span class="detail-value">${card.dataset.location || 'NA'}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">PRICE:</span>
-                <span class="detail-value">${card.dataset.price || 'NA'}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">SUBMITTED BY:</span>
-                <span class="detail-value">${card.dataset.by || 'NA'}</span>
-            </div>
-            <div class="detail-row detail-note">
-                <span class="detail-label">Note:</span>
-                <span class="detail-value">${card.dataset.note || ''}</span>
-            </div>
-        `;
-        card.appendChild(detail);
+        <div class="modal-left">
+            <input type="file" accept="image/*" id="form-image" required>
+            <label for="form-image" class="upload-label">
+                <span class="upload-title">UPLOAD IMAGE</span>
+                <span class="upload-sub">Drag and Drop or<br>Click to browse your device</span>
+            </label>
+        </div>
 
-        card.addEventListener('click', () => {
-            card.classList.toggle('flipped');
-        });
-    });
-</script>
+        <div class="modal-divider"></div>
+
+        <div class="modal-right">
+            <div class="form-field">
+                <label class="form-label">CATEGORY:</label>
+                <select class="form-input" id="form-category" required>
+                    <option value="" disabled selected></option>
+                    <option value="Postcard">Postcard</option>
+                    <option value="Matchbox">Matchbox</option>
+                    <option value="Sticker">Sticker</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label">LOCATION:</label>
+                <input type="text" class="form-input" id="form-location" required>
+            </div>
+            <div class="form-field">
+                <label class="form-label">PRICE:</label>
+                <input type="text" class="form-input" id="form-price">
+            </div>
+            <div class="form-field">
+                <label class="form-label">YOUR EMAIL <span class="form-label-opt">(OPTIONAL):</span></label>
+                <input type="email" class="form-input" id="form-email">
+            </div>
+            <div class="form-field">
+                <label class="form-label">A NOTE:</label>
+                <input type="text" class="form-input" id="form-note">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="main.js"></script>
 </body>
 </html>
