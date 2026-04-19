@@ -17,6 +17,19 @@ document.querySelectorAll('.filter-link').forEach(link => {
 });
 
 
+// Show custom category input when "Other" is selected
+document.getElementById('form-category').addEventListener('change', function() {
+    const customField = document.getElementById('custom-category-field');
+    const customInput = document.getElementById('form-category-custom');
+    if (this.value === 'Other') {
+        customField.style.display = '';
+        customInput.required = true;
+    } else {
+        customField.style.display = 'none';
+        customInput.required = false;
+    }
+});
+
 const overlay = document.getElementById('modal-overlay');
 document.getElementById('submit-card').addEventListener('click', () => {
     overlay.classList.add('open');
@@ -29,7 +42,10 @@ overlay.addEventListener('click', e => {
 document.getElementById('submit-form').addEventListener('submit', e => {
     e.preventDefault();
     const file = document.getElementById('form-image').files[0];
-    const category = document.getElementById('form-category').value;
+    const rawCategory = document.getElementById('form-category').value;
+    const category = rawCategory === 'Other'
+        ? (document.getElementById('form-category-custom').value || 'Other')
+        : rawCategory;
     const location = document.getElementById('form-location').value;
     const price = document.getElementById('form-price').value || 'NA';
     const note = document.getElementById('form-note').value;

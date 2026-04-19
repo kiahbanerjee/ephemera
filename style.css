@@ -149,7 +149,7 @@ main {
     display: none;
 }
 
-/* ── Detail panel ── */
+/* ── details ── */
 
 .detail {
     position: absolute;
@@ -210,13 +210,9 @@ font-style: normal;
 
 .submit-plus {
     font-size: 50px;
-    color: #f3900546;
+    color: #f39005;
     transition: color 0.15s ease;
     line-height: 1;
-}
-
-.card-submit:hover .submit-plus {
-    color: #f39005;
 }
 
 /* ── Modal ── */
