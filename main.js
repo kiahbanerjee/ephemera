@@ -17,6 +17,86 @@ document.querySelectorAll('.filter-link').forEach(link => {
 });
 
 
+// Loading screen
+const images = [
+    'manhatta 1.jpg', 'heros.jpg', 'monkey bar.jpg', 'The Corner Store.jpg',
+    'polo bar.jpg', 'deux chats.jpg', 'The Standard.jpg', 'manhatta 3.jpg',
+    'bar madonna.jpg', "jefrey's grocery.jpg", 'manhatta 2.jpg'
+];
+
+const loadingContainer = document.getElementById('loading-images');
+
+// Generate edge positions avoiding the center 35-65% x, 30-70% y
+function edgePosition() {
+    const zones = [
+        () => ({ left: Math.random() * 28, top: Math.random() * 80 + 10 }),
+        () => ({ left: Math.random() * 28 + 68, top: Math.random() * 80 + 10 }),
+        () => ({ left: Math.random() * 40 + 20, top: Math.random() * 18 }),
+        () => ({ left: Math.random() * 40 + 20, top: Math.random() * 18 + 76 }),
+    ];
+    const pos = zones[Math.floor(Math.random() * zones.length)]();
+    return pos;
+}
+
+images.forEach((src, i) => {
+    setTimeout(() => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'loading-img';
+        const pos = edgePosition();
+        img.style.left = pos.left + 'vw';
+        img.style.top  = pos.top + 'vh';
+        loadingContainer.appendChild(img);
+        setTimeout(() => img.remove(), 3500);
+    }, i * 400);
+});
+
+// Hide actual title until loading finishes
+const siteTitle = document.querySelector('.site-title');
+siteTitle.style.opacity = '0';
+
+setTimeout(() => {
+    const loading = document.getElementById('loading');
+    const loadingTitle = document.getElementById('loading-title');
+    const targetRect = siteTitle.getBoundingClientRect();
+    const fromRect = loadingTitle.getBoundingClientRect();
+
+    const scaleX = targetRect.width / fromRect.width;
+    const scaleY = targetRect.height / fromRect.height;
+    const dx = targetRect.left + targetRect.width / 2 - (fromRect.left + fromRect.width / 2);
+    const dy = targetRect.top + targetRect.height / 2 - (fromRect.top + fromRect.height / 2);
+    const scale = Math.min(scaleX, scaleY);
+
+    loadingTitle.style.transition = 'transform 0.9s cubic-bezier(0.4,0,0.2,1), opacity 0.9s ease';
+    loadingTitle.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${scale})`;
+    loadingTitle.style.opacity = '0';
+
+    setTimeout(() => {
+        loading.classList.add('hidden');
+        siteTitle.style.transition = 'opacity 0.4s ease';
+        siteTitle.style.opacity = '1';
+        setTimeout(() => {
+            loading.remove();
+            siteTitle.style.transition = '';
+            siteTitle.style.opacity = '';
+        }, 600);
+    }, 900);
+}, 7000);
+
+// About panel
+document.getElementById('about-tab').addEventListener('click', () => {
+    document.getElementById('about-panel').classList.toggle('open');
+});
+
+// Back to top button
+const backToTop = document.getElementById('back-to-top');
+document.querySelector('main').addEventListener('scroll', function() {
+    backToTop.classList.toggle('visible', this.scrollTop > 200);
+});
+backToTop.addEventListener('click', () => {
+    document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 // Show custom category input when "Other" is selected
 document.getElementById('form-category').addEventListener('change', function() {
     const customField = document.getElementById('custom-category-field');

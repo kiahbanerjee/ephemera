@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://use.typekit.net/sfz3pyh.css">
 <link rel="stylesheet" href="https://use.typekit.net/sfz3pyh.css">
+<link rel="stylesheet" href="https://use.typekit.net/sfz3pyh.css">
 </head>
 <body>
+<div id="loading">
+    <div id="loading-images"></div>
+    <h1 id="loading-title">NYC EPHEMERA</h1>
+</div>
 
     <header>
         <div class="header-inner">
@@ -48,7 +53,6 @@
 <!-- Submission -->
 <div class="modal-overlay" id="modal-overlay">
     <form class="modal" id="submit-form">
-        <button type="submit" class="form-submit" title="Submit"></button>
 
         <div class="modal-left">
             <input type="file" accept="image/*" id="form-image" required>
@@ -91,9 +95,19 @@
                 <label class="form-label">A NOTE:</label>
                 <input type="text" class="form-input" id="form-note">
             </div>
+            <button type="submit" class="form-submit">SUBMIT</button>
         </div>
     </form>
 </div>
+
+<div id="about-panel">
+    <div id="about-tab">ABOUT</div>
+    <div id="about-content">
+        <p>NYC Ephemera is a community archive of found objects from New York City — matchbooks, postcards, stickers, and more. Collected and submitted by people who love this city.</p>
+    </div>
+</div>
+
+<button id="back-to-top">↑</button>
 
 <script src="main.js"></script>
 </body>
