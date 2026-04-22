@@ -211,6 +211,18 @@ main {
     letter-spacing: 0.09em;
 }
 
+.card.flipped::before {
+    display: none;
+}
+
+.card-submit {
+    counter-increment: none;
+}
+
+.card-submit::before {
+    display: none;
+}
+
 
 .card img {
     max-width: 100%;
@@ -225,9 +237,6 @@ main {
     pointer-events: none;
 }
 
-.card.flipped::before {
-    display: none;
-}
 
 /* ── details ── */
 
@@ -279,14 +288,6 @@ font-style: normal;
 }
 
 /* ── Submit card ── */
-
-.card-submit {
-    counter-increment: none;
-}
-
-.card-submit::before {
-    display: none;
-}
 
 .submit-plus {
     font-size: 50px;
