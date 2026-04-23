@@ -247,7 +247,6 @@ main {
     inset: 0;
     display: flex;
     flex-direction: column;
-    border: 1px solid #000000;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
