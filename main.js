@@ -97,61 +97,23 @@ backToTop.addEventListener('click', () => {
     document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Cropper
-let cropper = null;
-let croppedDataUrl = null;
-
+// Image preview in modal
 document.getElementById('form-image').addEventListener('change', function() {
     const file = this.files[0];
     if (!file) return;
-    croppedDataUrl = null;
     const reader = new FileReader();
     reader.onload = function(ev) {
-        document.getElementById('upload-label').style.display = 'none';
-        document.getElementById('crop-container').style.display = 'none';
-        if (cropper) { cropper.destroy(); cropper = null; }
-        const preview = document.getElementById('crop-preview');
+        const left = document.querySelector('.modal-left');
+        let preview = left.querySelector('.upload-preview');
+        if (!preview) {
+            preview = document.createElement('img');
+            preview.className = 'upload-preview';
+            left.appendChild(preview);
+        }
         preview.src = ev.target.result;
-        preview.style.display = 'block';
-        document.getElementById('crop-btn').style.display = 'block';
-        document.getElementById('crop-image').src = ev.target.result;
+        document.getElementById('upload-label').style.display = 'none';
     };
     reader.readAsDataURL(file);
-});
-
-document.getElementById('crop-btn').addEventListener('click', () => {
-    const cropBtn = document.getElementById('crop-btn');
-
-    if (!cropper) {
-        // Start cropping
-        document.getElementById('crop-preview').style.display = 'none';
-        const cropContainer = document.getElementById('crop-container');
-        cropContainer.style.display = 'block';
-        cropper = new Cropper(document.getElementById('crop-image'), {
-            viewMode: 1,
-            autoCropArea: 1,
-            background: false,
-            guides: false,
-            highlight: false,
-        });
-        cropBtn.textContent = 'CONFIRM';
-    } else {
-        // Confirm crop
-        cropper.getCroppedCanvas().toBlob(blob => {
-            const reader = new FileReader();
-            reader.onload = ev => {
-                croppedDataUrl = ev.target.result;
-                document.getElementById('crop-container').style.display = 'none';
-                cropper.destroy();
-                cropper = null;
-                const preview = document.getElementById('crop-preview');
-                preview.src = croppedDataUrl;
-                preview.style.display = 'block';
-                cropBtn.textContent = 'CROP';
-            };
-            reader.readAsDataURL(blob);
-        }, 'image/jpeg', 0.9);
-    }
 });
 
 // Show custom category input when "Other" is selected
@@ -172,12 +134,8 @@ const overlay = document.getElementById('modal-overlay');
 function closeModal() {
     overlay.classList.remove('open');
     document.getElementById('submit-form').reset();
-    if (cropper) { cropper.destroy(); cropper = null; }
-    croppedDataUrl = null;
-    document.getElementById('crop-container').style.display = 'none';
-    document.getElementById('crop-image').src = '';
-    document.getElementById('crop-preview').style.display = 'none';
-    document.getElementById('crop-preview').src = '';
+    const preview = document.querySelector('.upload-preview');
+    if (preview) preview.remove();
     const label = document.querySelector('.upload-label');
     if (label) label.style.display = '';
     const customField = document.getElementById('custom-category-field');
@@ -218,14 +176,12 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
     const email = document.getElementById('form-email').value;
     const note = document.getElementById('form-note').value;
 
-    if (!croppedDataUrl) {
-        alert('Please crop your image first.');
-        submitBtn.textContent = 'SUBMIT';
-        submitBtn.disabled = false;
-        return;
-    }
-
-    const imageBase64 = croppedDataUrl.split(',')[1];
+    const imageBase64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = ev => resolve(ev.target.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
 
     await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
@@ -247,7 +203,7 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
     card.dataset.note = note;
 
     const img = document.createElement('img');
-    img.src = croppedDataUrl;
+    img.src = URL.createObjectURL(file);
     img.alt = category;
     card.appendChild(img);
 
