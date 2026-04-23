@@ -81,7 +81,7 @@ setTimeout(() => {
             siteTitle.style.opacity = '';
         }, 600);
     }, 900);
-}, 7000);
+}, 6000);
 
 // About panel
 document.getElementById('about-tab').addEventListener('click', () => {
@@ -95,6 +95,25 @@ document.querySelector('main').addEventListener('scroll', function() {
 });
 backToTop.addEventListener('click', () => {
     document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Image preview in modal
+document.getElementById('form-image').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        const left = document.querySelector('.modal-left');
+        let preview = left.querySelector('.upload-preview');
+        if (!preview) {
+            preview = document.createElement('img');
+            preview.className = 'upload-preview';
+            left.appendChild(preview);
+        }
+        preview.src = ev.target.result;
+        left.querySelector('.upload-label').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
 });
 
 // Show custom category input when "Other" is selected
@@ -117,10 +136,21 @@ document.getElementById('submit-card').addEventListener('click', () => {
 overlay.addEventListener('click', e => {
     if (e.target === overlay) overlay.classList.remove('open');
 });
+document.getElementById('modal-close').addEventListener('click', () => {
+    overlay.classList.remove('open');
+});
 
 
-document.getElementById('submit-form').addEventListener('submit', e => {
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6L5uT-6Gip9CiqYTwvqFQl39gO0c0my1jPpLdZF4m5NWgBJo2i_gL69aXaGpYx_7G3w/exec';
+
+document.getElementById('submit-form').addEventListener('submit', async e => {
     e.preventDefault();
+
+    const submitBtn = document.querySelector('.form-submit');
+    submitBtn.textContent = 'SUBMITTING...';
+    submitBtn.disabled = true;
+
+    try {
     const file = document.getElementById('form-image').files[0];
     const rawCategory = document.getElementById('form-category').value;
     const category = rawCategory === 'Other'
@@ -128,34 +158,90 @@ document.getElementById('submit-form').addEventListener('submit', e => {
         : rawCategory;
     const location = document.getElementById('form-location').value;
     const price = document.getElementById('form-price').value || 'NA';
+    const email = document.getElementById('form-email').value;
     const note = document.getElementById('form-note').value;
 
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.dataset.object = category;
-        card.dataset.location = location;
-        card.dataset.price = price;
-        card.dataset.by = 'Community';
-        card.dataset.note = note;
+    const imageBase64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = ev => resolve(ev.target.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
 
-        const img = document.createElement('img');
-        img.src = ev.target.result;
-        img.alt = category;
-        card.appendChild(img);
+    await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({
+            category, location, price, email, note,
+            imageBase64,
+            imageMimeType: file.type,
+            imageName: file.name
+        })
+    });
 
-     
-        const submitCard = document.getElementById('submit-card');
-        submitCard.parentNode.insertBefore(card, submitCard.nextSibling);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.object = category;
+    card.dataset.location = location;
+    card.dataset.price = price;
+    card.dataset.by = email || 'Community';
+    card.dataset.note = note;
 
-        buildDetail(card);
-        overlay.classList.remove('open');
-        document.getElementById('submit-form').reset();
-    };
-    reader.readAsDataURL(file);
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.alt = category;
+    card.appendChild(img);
+
+    const submitCard = document.getElementById('submit-card');
+    submitCard.parentNode.insertBefore(card, submitCard.nextSibling);
+
+    buildDetail(card);
+    overlay.classList.remove('open');
+    document.getElementById('submit-form').reset();
+    const preview = document.querySelector('.upload-preview');
+    if (preview) preview.remove();
+    document.querySelector('.upload-label').style.display = '';
+    } catch (err) {
+        console.error('Submission error:', err);
+        alert('Submission failed: ' + err.message);
+    } finally {
+        submitBtn.textContent = 'SUBMIT';
+        submitBtn.disabled = false;
+    }
 });
 
+async function loadSavedCards() {
+    const url = `https://docs.google.com/spreadsheets/d/1D0gaICwWj3kSvwjrA_nxVazcgKTmSy9Nwd5vfh6_FtI/gviz/tq?tqx=out:json`;
+
+    const res = await fetch(url);
+    const text = await res.text();
+
+    const json = JSON.parse(text.substring(47, text.length - 2));
+    const rows = json.table.rows;
+
+    rows.forEach(row => {
+        const cols = row.c;
+        const imageUrl = cols[5]?.v?.trim();
+        if (!imageUrl || !imageUrl.startsWith('http')) return;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.object = cols[0]?.v || '';
+        card.dataset.location = cols[1]?.v || '';
+        card.dataset.price = cols[2]?.v || 'NA';
+        card.dataset.by = cols[3]?.v || 'Community';
+        card.dataset.note = cols[4]?.v || '';
+
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = card.dataset.object;
+        card.appendChild(img);
+
+        const submitCard = document.getElementById('submit-card');
+        submitCard.parentNode.insertBefore(card, submitCard.nextSibling);
+        buildDetail(card);
+    });
+}
 
 function buildDetail(card) {
     const detail = document.createElement('div');
@@ -183,7 +269,15 @@ function buildDetail(card) {
         </div>
     `;
     card.appendChild(detail);
-    card.addEventListener('click', () => card.classList.toggle('flipped'));
+    let flipTimer;
+    card.addEventListener('click', () => {
+        const isFlipped = card.classList.toggle('flipped');
+        clearTimeout(flipTimer);
+        if (isFlipped) {
+            flipTimer = setTimeout(() => card.classList.remove('flipped'), 6000);
+        }
+    });
 }
 
 document.querySelectorAll('.card:not(#submit-card)').forEach(card => buildDetail(card));
+loadSavedCards();
