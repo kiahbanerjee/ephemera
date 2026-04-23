@@ -184,14 +184,14 @@ main {
     grid-template-columns: repeat(4, 1fr);
     gap: 5px;
     padding: 5px;
-    border: 1px solid #000000;
+    border: 1.5px solid #000000;
     background: #FFC24A;
     counter-reset: card;
 }
 
 .card {
     background-color: #FFC24A;
-    border: 1px solid #000000;
+    border: 1.5px solid #000000;
     padding: 28px;
     display: flex;
     flex-direction: column;

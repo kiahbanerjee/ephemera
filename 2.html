@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+const DBOpenRequest = window.indexedDB.open("toDoList", 4);
+
+DBOpenRequest.onsuccess = (event) => {
+  note.appendChild(document.createElement("li")).textContent =
+    "Database initialized.";
+
+
+  db = DBOpenRequest.result;
+
+  
+  addData();
+};
+
+function addData()
+  const newItem = [
+    {
+      taskTitle: "Category",
+      hours: "003",
+      minutes: 35,
+      day: 24,
+      month: "Location",
+      year: 2013,
+      notified: "no",
+    },
+  ];
+
+ 
+  const transaction = db.transaction(["toDoList"], "readwrite");
+  console transaction = DBOpenRequest;
+    
+
+
+  transaction.oncomplete = (event) => {
+    note.appendChild(document.createElement("li")).textContent =
+      "Transaction completed.";
+  };
+
+  transaction.onerror = (event) => {
+    note.appendChild(document.createElement("li")).textContent =
+      "Transaction not opened due to error. Duplicate items not allowed.";
+  };
+
+  const objectStore = transaction.objectStore("toDoList");
+
+  const objectStoreRequest = objectStore.add(newItem[0]);
+
+  objectStoreRequest.onsuccess = (event) => {
+    note.appendChild(document.createElement("li")).textContent =
+      "Request successful.";
+  };
+
+    </script>
+</body>
+</html>
