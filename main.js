@@ -116,18 +116,6 @@ document.getElementById('form-image').addEventListener('change', function() {
     reader.readAsDataURL(file);
 });
 
-// Show custom category input when "Other" is selected
-document.getElementById('form-category').addEventListener('change', function() {
-    const customField = document.getElementById('custom-category-field');
-    const customInput = document.getElementById('form-category-custom');
-    if (this.value === 'Other') {
-        customField.style.display = '';
-        customInput.required = true;
-    } else {
-        customField.style.display = 'none';
-        customInput.required = false;
-    }
-});
 
 const overlay = document.getElementById('modal-overlay');
 
@@ -138,10 +126,6 @@ function closeModal() {
     if (preview) preview.remove();
     const label = document.querySelector('.upload-label');
     if (label) label.style.display = '';
-    const customField = document.getElementById('custom-category-field');
-    if (customField) customField.style.display = 'none';
-    const customInput = document.getElementById('form-category-custom');
-    if (customInput) customInput.required = false;
 }
 
 document.getElementById('submit-card').addEventListener('click', () => {
@@ -167,10 +151,7 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
 
     try {
     const file = document.getElementById('form-image').files[0];
-    const rawCategory = document.getElementById('form-category').value;
-    const category = rawCategory === 'Other'
-        ? (document.getElementById('form-category-custom').value || 'Other')
-        : rawCategory;
+    const category = document.getElementById('form-category').value;
     const location = document.getElementById('form-location').value;
     const price = document.getElementById('form-price').value || 'NA';
     const email = document.getElementById('form-email').value;
@@ -212,6 +193,9 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
 
     buildDetail(card);
     closeModal();
+    const successOverlay = document.getElementById('success-overlay');
+    successOverlay.classList.add('open');
+    setTimeout(() => successOverlay.classList.remove('open'), 2000);
     } catch (err) {
         console.error('Submission error:', err);
         alert('Submission failed: ' + err.message);
@@ -260,7 +244,7 @@ function buildDetail(card) {
     detail.innerHTML = `
         <div class="detail-row">
             <span class="detail-label">OBJECT:</span>
-            <span class="detail-value">${card.dataset.object || 'NA'}</span>
+            <span class="detail-value">${card.dataset.customObject || card.dataset.object || 'NA'}</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">LOCATION:</span>
@@ -275,7 +259,7 @@ function buildDetail(card) {
             <span class="detail-value">${card.dataset.by || 'NA'}</span>
         </div>
         <div class="detail-row detail-note">
-            <span class="detail-label">Note:</span>
+            <span class="detail-label">NOTE:</span>
             <span class="detail-value">${card.dataset.note || ''}</span>
         </div>
     `;
