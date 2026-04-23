@@ -9,8 +9,8 @@
 }
 
 body {
-    background-color: #000000;
-    color: #fff;
+    background-color: #FFC24A;
+    color: #000000;
     height: 100vh;
     overflow: hidden;
     display: flex;
@@ -29,17 +29,17 @@ main::-webkit-scrollbar {
 }
 
 main::-webkit-scrollbar-track {
-    background: #000;
+    background: #FFC24A;
 }
 
 main::-webkit-scrollbar-thumb {
-    background: rgba(243, 144, 5, 0.3);
+    background: #FFC24A;
 }
 
 /* ── Header ── */
 
 header {
-    background-color: #000000;
+    background-color: #FFC24A;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -59,7 +59,7 @@ header {
     position: relative;
 }
 
-/* ── About panel ── */
+/* ── About  ── */
 
 #about-panel {
     position: fixed;
@@ -84,9 +84,9 @@ header {
     transform: rotate(180deg);
     font-size: 12px;
     letter-spacing: 0.16em;
-    color: #f3900582;
-    background: #000;
-    border: 1px solid #f3900582;
+    color: #000000;
+    background: #FFC24A;
+    border: 1px solid #000000;
     border-left: none;
     border-radius: 0 12px 12px 0;
     padding: 20px 8px;
@@ -98,9 +98,9 @@ header {
 }
 
 #about-panel.open #about-tab {
-    background: #f39005;
-    color: #000;
-    border-color: #f3900546;
+    background: #FFC24A;
+    color: #000000;
+    border-color: #000000;
 }
 
 #about-panel, #about-panel * {
@@ -109,7 +109,7 @@ header {
 }
 
 #about-content {
-    background: #f39005;
+    background: #FFC24A;
     width: 65vw;
     height: 100%;
     border-radius: 12px 0 0 12px;
@@ -122,7 +122,7 @@ header {
 #about-content p {
     font-size: 12px;
     letter-spacing: 0.1em;
-    color: #000;
+    color: #000000;
     line-height: 2;
     max-width: 480px;
 }
@@ -131,7 +131,7 @@ header {
     font-family: "swordfish", sans-serif;
     font-weight: 400;
     font-style: normal;
-    color: #fff;
+    color: #000000;
     font-size: 90px;
     transition: filter 4s ease, opacity 4s ease;
 }
@@ -151,20 +151,20 @@ header {
 
 .filter-link {
     text-decoration: none;
-    color: #f3900582;
+    color: #000000;
     font-size: 12px;
     letter-spacing: 0.16em;
     transition: color 0.15s ease;
 }
 
 .filter-link:hover {
-    color: #f39005;
+    color: #000000;
     font-style: italic;
 }
 
 .filter-link.active {
-    color: #f39005;
-    border-bottom: #f39005 solid 0.5px;
+    color: #000000;
+    border-bottom: 3px double #000000;
 }
 
 /* ── cards ── */
@@ -182,15 +182,16 @@ main {
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border-left: 1px solid #f3900546;
-    border-top: 1px solid #f3900546;
+    gap: 5px;
+    padding: 5px;
+    border: 1px solid #000000;
+    background: #FFC24A;
     counter-reset: card;
 }
 
 .card {
-    background-color: #000000;
-    border-right: 1px solid #f3900546;
-    border-bottom: 1px solid #f3900546;
+    background-color: #FFC24A;
+    border: 1px solid #000000;
     padding: 28px;
     display: flex;
     flex-direction: column;
@@ -208,7 +209,7 @@ main {
     top: 10px;
     left: 12px;
     font-size: 10px;
-    color: #f39005;
+    color: #000000;
     letter-spacing: 0.09em;
 }
 
@@ -246,11 +247,11 @@ main {
     inset: 0;
     display: flex;
     flex-direction: column;
-    border: 1px solid #f3900546;
+    border: 1px solid #000000;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .card.flipped .detail {
@@ -261,7 +262,7 @@ main {
 .detail-row {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #f3900546;
+    border-bottom: 1px solid #000000;
     padding: 10px 16px;
     gap: 16px;
     flex-shrink: 0;
@@ -276,23 +277,23 @@ main {
 .detail-label {
     font-size: 9px;
     letter-spacing: 0.16em;
-    color: rgba(255,255,255,0.6);
+    color: #000000;
     white-space: nowrap;
     min-width: 90px;
 }
 
 .detail-value {
      font-family: "adobe-handwriting-ernie", sans-serif;
-font-weight: 400;
+font-weight: 50;
 font-style: normal;
-    color: #f39005ad;
+    color: #000000;
 }
 
 /* ── Submit card ── */
 
 .submit-plus {
     font-size: 50px;
-    color: #f39005;
+    color: #000000;
     transition: color 0.15s ease;
     line-height: 1;
 }
@@ -322,9 +323,9 @@ font-style: normal;
     height: 70vh;
     display: flex;
     flex-direction: row;
-    border: 1px solid #f3900546;
+    border: 1px solid #000000;
     position: relative;
-    background: #000;
+    background: #FFC24A;
 }
 
 #modal-close {
@@ -333,22 +334,23 @@ font-style: normal;
     right: 16px;
     background: none;
     border: none;
-    color: #f3900582;
+    color: #000000;
     font-size: 14px;
     line-height: 1;
     padding: 4px;
     transition: color 0.15s ease;
-    z-index: 10;
+    z-index: 600;
+    pointer-events: auto;
 }
 
 #modal-close:hover {
-    color: #f39005;
+    color: #000000;
 }
 
 .form-submit {
     background: none;
-    border: 1px solid #f3900546;
-    color: #f39005;
+    border: 1px solid #000000;
+    color: #000000;
     font-size: 10px;
     letter-spacing: 0.24em;
     padding: 10px 0;
@@ -357,8 +359,8 @@ font-style: normal;
 }
 
 .form-submit:hover {
-    border-color: #f39005;
-    color: #f39005;
+    border-color: #000000;
+    color: #000000;
 }
 
 /* Left — upload */
@@ -396,23 +398,35 @@ font-style: normal;
     pointer-events: none;
 }
 
+#crop-btn {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: 1px solid #000000;
+    color: #000000;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    padding: 8px 24px;
+    z-index: 10;
+    transition: border-color 0.15s ease;
+}
+
+#crop-btn:hover {
+    border-color: #000000;
+}
+
 .upload-title {
     font-size: 11px;
     letter-spacing: 0.24em;
-    color: rgba(255,255,255,0.7);
-}
-
-.upload-sub {
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.3);
-    line-height: 1.8;
+    color: #000000;
 }
 
 /* Divider */
 .modal-divider {
     width: 1px;
-    background: #f3900546;
+    background: #FFC24A;
     margin: 40px 0;
 }
 
@@ -430,18 +444,18 @@ font-style: normal;
     display: flex;
     flex-direction: column;
     gap: 3px;
-    border-bottom: 1px solid #f3900546;
+    border-bottom: 1px solid #000000;
     padding-bottom: 4px;
 }
 
 .form-label {
     font-size: 10px;
     letter-spacing: 0.19em;
-    color: rgba(255,255,255,0.9);
+    color: #000000;
 }
 
 .form-label-opt {
-    color: rgba(255,255,255,0.4);
+    color: #000000;
     font-size: 10px;
     letter-spacing: 0.16em;
 }
@@ -450,7 +464,7 @@ font-style: normal;
     background: none;
     border: none;
     outline: none;
-    color: #fff;
+    color: #000000;
     font-size: 13px;
     letter-spacing: 0.09em;
     width: 100%;
@@ -458,7 +472,7 @@ font-style: normal;
 }
 
 .form-input option {
-    background: #000;
+    background: #FFC24A;
 }
 
 select.form-input {
@@ -471,7 +485,7 @@ select.form-input {
 #loading {
     position: fixed;
     inset: 0;
-    background: #000;
+    background: #FFC24A;
     z-index: 1000;
     transition: opacity 0.6s ease;
 }
@@ -489,7 +503,7 @@ select.form-input {
     font-family: "swordfish", sans-serif;
     font-size: 140px;
     font-weight: 400;
-    color: #fff;
+    color: #000000;
     white-space: nowrap;
     opacity: 0;
     filter: blur(20px);
@@ -527,8 +541,8 @@ select.form-input {
     bottom: 32px;
     right: 32px;
     background: none;
-    border: 1px solid #f3900546;
-    color: #f3900546;
+    border: 1px solid #000000;
+    color: #000000;
     font-size: 14px;
     width: 36px;
     height: 36px;
@@ -547,6 +561,6 @@ select.form-input {
 }
 
 #back-to-top:hover {
-    color: #f39005;
-    border-color: #f39005;
+    color: #000000;
+    border-color: #000000;
 }

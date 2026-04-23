@@ -97,23 +97,61 @@ backToTop.addEventListener('click', () => {
     document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Image preview in modal
+// Cropper
+let cropper = null;
+let croppedDataUrl = null;
+
 document.getElementById('form-image').addEventListener('change', function() {
     const file = this.files[0];
     if (!file) return;
+    croppedDataUrl = null;
     const reader = new FileReader();
     reader.onload = function(ev) {
-        const left = document.querySelector('.modal-left');
-        let preview = left.querySelector('.upload-preview');
-        if (!preview) {
-            preview = document.createElement('img');
-            preview.className = 'upload-preview';
-            left.appendChild(preview);
-        }
+        document.getElementById('upload-label').style.display = 'none';
+        document.getElementById('crop-container').style.display = 'none';
+        if (cropper) { cropper.destroy(); cropper = null; }
+        const preview = document.getElementById('crop-preview');
         preview.src = ev.target.result;
-        left.querySelector('.upload-label').style.display = 'none';
+        preview.style.display = 'block';
+        document.getElementById('crop-btn').style.display = 'block';
+        document.getElementById('crop-image').src = ev.target.result;
     };
     reader.readAsDataURL(file);
+});
+
+document.getElementById('crop-btn').addEventListener('click', () => {
+    const cropBtn = document.getElementById('crop-btn');
+
+    if (!cropper) {
+        // Start cropping
+        document.getElementById('crop-preview').style.display = 'none';
+        const cropContainer = document.getElementById('crop-container');
+        cropContainer.style.display = 'block';
+        cropper = new Cropper(document.getElementById('crop-image'), {
+            viewMode: 1,
+            autoCropArea: 1,
+            background: false,
+            guides: false,
+            highlight: false,
+        });
+        cropBtn.textContent = 'CONFIRM';
+    } else {
+        // Confirm crop
+        cropper.getCroppedCanvas().toBlob(blob => {
+            const reader = new FileReader();
+            reader.onload = ev => {
+                croppedDataUrl = ev.target.result;
+                document.getElementById('crop-container').style.display = 'none';
+                cropper.destroy();
+                cropper = null;
+                const preview = document.getElementById('crop-preview');
+                preview.src = croppedDataUrl;
+                preview.style.display = 'block';
+                cropBtn.textContent = 'CROP';
+            };
+            reader.readAsDataURL(blob);
+        }, 'image/jpeg', 0.9);
+    }
 });
 
 // Show custom category input when "Other" is selected
@@ -130,14 +168,33 @@ document.getElementById('form-category').addEventListener('change', function() {
 });
 
 const overlay = document.getElementById('modal-overlay');
+
+function closeModal() {
+    overlay.classList.remove('open');
+    document.getElementById('submit-form').reset();
+    if (cropper) { cropper.destroy(); cropper = null; }
+    croppedDataUrl = null;
+    document.getElementById('crop-container').style.display = 'none';
+    document.getElementById('crop-image').src = '';
+    document.getElementById('crop-preview').style.display = 'none';
+    document.getElementById('crop-preview').src = '';
+    const label = document.querySelector('.upload-label');
+    if (label) label.style.display = '';
+    const customField = document.getElementById('custom-category-field');
+    if (customField) customField.style.display = 'none';
+    const customInput = document.getElementById('form-category-custom');
+    if (customInput) customInput.required = false;
+}
+
 document.getElementById('submit-card').addEventListener('click', () => {
     overlay.classList.add('open');
 });
 overlay.addEventListener('click', e => {
-    if (e.target === overlay) overlay.classList.remove('open');
+    if (e.target === overlay) closeModal();
 });
-document.getElementById('modal-close').addEventListener('click', () => {
-    overlay.classList.remove('open');
+document.getElementById('modal-close').addEventListener('click', e => {
+    e.stopPropagation();
+    closeModal();
 });
 
 
@@ -161,12 +218,14 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
     const email = document.getElementById('form-email').value;
     const note = document.getElementById('form-note').value;
 
-    const imageBase64 = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = ev => resolve(ev.target.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
+    if (!croppedDataUrl) {
+        alert('Please crop your image first.');
+        submitBtn.textContent = 'SUBMIT';
+        submitBtn.disabled = false;
+        return;
+    }
+
+    const imageBase64 = croppedDataUrl.split(',')[1];
 
     await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
@@ -174,7 +233,7 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
         body: JSON.stringify({
             category, location, price, email, note,
             imageBase64,
-            imageMimeType: file.type,
+            imageMimeType: 'image/jpeg',
             imageName: file.name
         })
     });
@@ -188,7 +247,7 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
     card.dataset.note = note;
 
     const img = document.createElement('img');
-    img.src = URL.createObjectURL(file);
+    img.src = croppedDataUrl;
     img.alt = category;
     card.appendChild(img);
 
@@ -196,11 +255,7 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
     submitCard.parentNode.insertBefore(card, submitCard.nextSibling);
 
     buildDetail(card);
-    overlay.classList.remove('open');
-    document.getElementById('submit-form').reset();
-    const preview = document.querySelector('.upload-preview');
-    if (preview) preview.remove();
-    document.querySelector('.upload-label').style.display = '';
+    closeModal();
     } catch (err) {
         console.error('Submission error:', err);
         alert('Submission failed: ' + err.message);
@@ -274,7 +329,7 @@ function buildDetail(card) {
         const isFlipped = card.classList.toggle('flipped');
         clearTimeout(flipTimer);
         if (isFlipped) {
-            flipTimer = setTimeout(() => card.classList.remove('flipped'), 6000);
+            flipTimer = setTimeout(() => card.classList.remove('flipped'), 10000);
         }
     });
 }
