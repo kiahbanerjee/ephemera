@@ -129,7 +129,7 @@ header {
 
 .site-title {
     font-family: "swordfish", sans-serif;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
     color: #000000;
     font-size: 90px;
@@ -480,22 +480,75 @@ select.form-input {
     -webkit-appearance: none;
 }
 
-.form-field:has(select) {
+.custom-select {
     position: relative;
+    width: 100%;
 }
 
-.form-field:has(select)::after {
+.custom-select-value {
+    font-family: "adobe-handwriting-ernie", sans-serif;
+    font-size: 18px;
+}
+
+.custom-select-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 36px;
+    line-height: 36px;
+    font-family: "adobe-handwriting-ernie", sans-serif;
+    font-size: 18px;
+    color: #000000;
+}
+
+.custom-select-trigger::after {
     content: '';
-    position: absolute;
-    right: 4px;
-    bottom: 10px;
     width: 6px;
     height: 6px;
     border-right: 0.5px solid #000000;
     border-bottom: 0.5px solid #000000;
     transform: rotate(45deg);
-    pointer-events: none;
+    margin-bottom: 4px;
+    flex-shrink: 0;
 }
+
+.custom-select.open .custom-select-trigger::after {
+    transform: rotate(-135deg);
+    margin-bottom: -4px;
+}
+
+.custom-select-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #FFC24A;
+    border: 1px solid #000000;
+    z-index: 700;
+}
+
+.custom-select.open .custom-select-options {
+    display: block;
+}
+
+.custom-select-option {
+    padding: 5px 12px;
+    font-family: "adobe-handwriting-ernie", sans-serif;
+    font-size: 16px;
+    color: #000000;
+    border-bottom: 1px solid #000000;
+    letter-spacing: 0.05em;
+}
+
+.custom-select-option:last-child {
+    border-bottom: none;
+}
+
+.custom-select-option:hover {
+    font-style: italic;
+}
+
 
 /* ── Loading screen ── */
 

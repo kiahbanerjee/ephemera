@@ -68,13 +68,16 @@
         <div class="modal-right">
             <div class="form-field">
                 <label class="form-label">CATEGORY:</label>
-                <select class="form-input" id="form-category" required>
-                    <option value="" disabled selected></option>
-                    <option value="Postcard">Postcard</option>
-                    <option value="Matchbox">Matchbox</option>
-                    <option value="Sticker">Sticker</option>
-                    <option value="Other">Other</option>
-                </select>
+                <select class="form-input" id="form-category" required style="display:none"></select>
+                <div class="custom-select" id="custom-category">
+                    <div class="custom-select-trigger"><span class="custom-select-value"></span></div>
+                    <div class="custom-select-options">
+                        <div class="custom-select-option" data-value="Postcard">Postcard</div>
+                        <div class="custom-select-option" data-value="Matchbox">Matchbox</div>
+                        <div class="custom-select-option" data-value="Sticker">Sticker</div>
+                        <div class="custom-select-option" data-value="Other">Other</div>
+                    </div>
+                </div>
             </div>
             <div class="form-field">
                 <label class="form-label">LOCATION:</label>
@@ -97,12 +100,6 @@
     </form>
 </div>
 
-<div id="about-panel">
-    <div id="about-tab">ABOUT</div>
-    <div id="about-content">
-        <p>NYC Ephemera is a community archive of found objects from New York City — matchbooks, postcards, stickers, and more. Collected and submitted by people who love this city.</p>
-    </div>
-</div>
 
 <button id="back-to-top">↑</button>
 

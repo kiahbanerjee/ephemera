@@ -83,10 +83,6 @@ setTimeout(() => {
     }, 900);
 }, 6000);
 
-// About panel
-document.getElementById('about-tab').addEventListener('click', () => {
-    document.getElementById('about-panel').classList.toggle('open');
-});
 
 // Back to top button
 const backToTop = document.getElementById('back-to-top');
@@ -117,11 +113,34 @@ document.getElementById('form-image').addEventListener('change', function() {
 });
 
 
+// Custom category dropdown
+const customSelect = document.getElementById('custom-category');
+const nativeSelect = document.getElementById('form-category');
+const selectValue = customSelect.querySelector('.custom-select-value');
+
+customSelect.querySelector('.custom-select-trigger').addEventListener('click', () => {
+    customSelect.classList.toggle('open');
+});
+
+customSelect.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+        selectValue.textContent = opt.textContent;
+        nativeSelect.value = opt.dataset.value;
+        customSelect.classList.remove('open');
+    });
+});
+
+document.addEventListener('click', e => {
+    if (!customSelect.contains(e.target)) customSelect.classList.remove('open');
+});
+
 const overlay = document.getElementById('modal-overlay');
 
 function closeModal() {
     overlay.classList.remove('open');
     document.getElementById('submit-form').reset();
+    selectValue.textContent = '';
+    customSelect.classList.remove('open');
     const preview = document.querySelector('.upload-preview');
     if (preview) preview.remove();
     const label = document.querySelector('.upload-label');
