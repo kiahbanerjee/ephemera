@@ -1,4 +1,5 @@
 
+
 document.querySelectorAll('.filter-link').forEach(link => {
     link.addEventListener('click', e => {
         e.preventDefault();
@@ -51,37 +52,43 @@ images.forEach((src, i) => {
     }, i * 400);
 });
 
-// Hide actual title until loading finishes
 const siteTitle = document.querySelector('.site-title');
-siteTitle.style.opacity = '0';
+const skipAnimation = new URLSearchParams(window.location.search).has('skip');
 
-setTimeout(() => {
-    const loading = document.getElementById('loading');
-    const loadingTitle = document.getElementById('loading-title');
-    const targetRect = siteTitle.getBoundingClientRect();
-    const fromRect = loadingTitle.getBoundingClientRect();
-
-    const scaleX = targetRect.width / fromRect.width;
-    const scaleY = targetRect.height / fromRect.height;
-    const dx = targetRect.left + targetRect.width / 2 - (fromRect.left + fromRect.width / 2);
-    const dy = targetRect.top + targetRect.height / 2 - (fromRect.top + fromRect.height / 2);
-    const scale = Math.min(scaleX, scaleY);
-
-    loadingTitle.style.transition = 'transform 0.9s cubic-bezier(0.4,0,0.2,1), opacity 0.9s ease';
-    loadingTitle.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${scale})`;
-    loadingTitle.style.opacity = '0';
+if (skipAnimation) {
+    document.getElementById('loading').remove();
+    history.replaceState({}, '', window.location.pathname);
+} else {
+    siteTitle.style.opacity = '0';
 
     setTimeout(() => {
-        loading.classList.add('hidden');
-        siteTitle.style.transition = 'opacity 0.4s ease';
-        siteTitle.style.opacity = '1';
+        const loading = document.getElementById('loading');
+        const loadingTitle = document.getElementById('loading-title');
+        const targetRect = siteTitle.getBoundingClientRect();
+        const fromRect = loadingTitle.getBoundingClientRect();
+
+        const scaleX = targetRect.width / fromRect.width;
+        const scaleY = targetRect.height / fromRect.height;
+        const dx = targetRect.left + targetRect.width / 2 - (fromRect.left + fromRect.width / 2);
+        const dy = targetRect.top + targetRect.height / 2 - (fromRect.top + fromRect.height / 2);
+        const scale = Math.min(scaleX, scaleY);
+
+        loadingTitle.style.transition = 'transform 0.9s cubic-bezier(0.4,0,0.2,1), opacity 0.9s ease';
+        loadingTitle.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${scale})`;
+        loadingTitle.style.opacity = '0';
+
         setTimeout(() => {
-            loading.remove();
-            siteTitle.style.transition = '';
-            siteTitle.style.opacity = '';
-        }, 600);
-    }, 900);
-}, 6000);
+            loading.classList.add('hidden');
+            siteTitle.style.transition = 'opacity 0.4s ease';
+            siteTitle.style.opacity = '1';
+            setTimeout(() => {
+                loading.remove();
+                siteTitle.style.transition = '';
+                siteTitle.style.opacity = '';
+            }, 600);
+        }, 900);
+    }, 6000);
+}
 
 
 // Back to top button

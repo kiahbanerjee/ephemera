@@ -55,7 +55,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding-top: 50px;
-    padding-bottom: 8px;
+    padding-bottom: 28px;
     position: relative;
 }
 
@@ -127,6 +127,33 @@ header {
     max-width: 480px;
 }
 
+.gallery-view-link:hover {
+    font-style: italic;
+}
+
+.gallery-view-link {
+    text-decoration: none;
+    position: absolute;
+    top: 50px;
+    left: 24px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    -webkit-text-stroke: 0.3px #000000;
+    color: #000000;
+}
+
+.about-link {
+    position: absolute;
+    top: 50px;
+    right: 24px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    -webkit-text-stroke: 0.3px #000000;
+    color: #000000;
+}
+
 .site-title {
     font-family: "swordfish", sans-serif;
     font-weight: 500;
@@ -145,7 +172,7 @@ header {
 
 .filters {
     display: flex;
-    gap: 32px;
+    gap: 0;
     align-items: center;
 }
 
@@ -157,6 +184,13 @@ header {
     letter-spacing: 0.16em;
     -webkit-text-stroke: 0.3px #000000;
     transition: color 0.15s ease;
+    padding: 0 24px;
+    border-left: 1px solid #000000;
+}
+
+.filter-link:first-child {
+    border-left: none;
+    padding-left: 0;
 }
 
 .filter-link:hover {
@@ -166,7 +200,8 @@ header {
 
 .filter-link.active {
     color: #000000;
-    border-bottom: 3px double #000000;
+    text-decoration: underline double #000000;
+    text-underline-offset: 4px;
 }
 
 /* ── cards ── */
@@ -549,6 +584,21 @@ select.form-input {
     font-style: italic;
 }
 
+
+/* ── Corner decorations ── */
+
+.corner-decor {
+    display: none;
+}
+
+.corner-decor-right {
+    right: 0;
+    transform: scaleX(-1);
+}
+
+.corner-decor-left {
+    left: 0;
+}
 
 /* ── Loading screen ── */
 
