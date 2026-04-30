@@ -67,10 +67,11 @@ if (skipAnimation) {
         const targetRect = siteTitle.getBoundingClientRect();
         const fromRect = loadingTitle.getBoundingClientRect();
 
+        const zoom = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
         const scaleX = targetRect.width / fromRect.width;
         const scaleY = targetRect.height / fromRect.height;
-        const dx = targetRect.left + targetRect.width / 2 - (fromRect.left + fromRect.width / 2);
-        const dy = targetRect.top + targetRect.height / 2 - (fromRect.top + fromRect.height / 2);
+        const dx = (targetRect.left + targetRect.width / 2 - (fromRect.left + fromRect.width / 2)) / zoom;
+        const dy = (targetRect.top + targetRect.height / 2 - (fromRect.top + fromRect.height / 2)) / zoom;
         const scale = Math.min(scaleX, scaleY);
 
         loadingTitle.style.transition = 'transform 0.9s cubic-bezier(0.4,0,0.2,1), opacity 0.9s ease';
@@ -302,3 +303,21 @@ function buildDetail(card) {
 
 document.querySelectorAll('.card:not(#submit-card)').forEach(card => buildDetail(card));
 loadSavedCards();
+
+// Scroll-driven compact header
+const headerInnerEl = document.querySelector('.header-inner');
+const mainScrollEl  = document.querySelector('main');
+const compactDist   = 300;
+
+mainScrollEl.addEventListener('scroll', () => {
+    const p = Math.min(mainScrollEl.scrollTop / compactDist, 1);
+    headerInnerEl.style.height        = (30 - 18 * p) + 'vh';
+    headerInnerEl.style.paddingTop    = (50 - 38 * p) + 'px';
+    headerInnerEl.style.paddingBottom = (28 - 22 * p) + 'px';
+    headerInnerEl.style.gap           = (20 - 14 * p) + 'px';
+    if (siteTitle.style.opacity !== '0') {
+        siteTitle.style.fontSize = (90 - 50 * p) + 'px';
+    }
+    document.querySelectorAll('.filter-link').forEach(l => l.style.fontSize = (12 - 4 * p) + 'px');
+    document.querySelectorAll('.gallery-view-link, .about-link').forEach(l => { l.style.fontSize = (12 - 2 * p) + 'px'; l.style.top = (50 - 38 * p) + 'px'; });
+});

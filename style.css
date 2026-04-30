@@ -1,3 +1,7 @@
+html {
+    zoom: 1.5;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -43,19 +47,20 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
+    overflow: hidden;
+    border-bottom: 1.5px solid #000000;
 }
 
 .header-inner {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 50px 24px 28px;
     height: 30vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding-top: 50px;
-    padding-bottom: 28px;
+    justify-content: center;
+    gap: 20px;
     position: relative;
 }
 
@@ -127,19 +132,16 @@ header {
     max-width: 480px;
 }
 
-.gallery-view-link:hover {
-    font-style: italic;
-}
 
 .gallery-view-link {
     text-decoration: none;
     position: absolute;
     top: 50px;
     left: 24px;
+    font-family: "adobe-handwriting-ernie", sans-serif;
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    -webkit-text-stroke: 0.3px #000000;
+    font-weight: 400;
+    letter-spacing: 0.08em;
     color: #000000;
 }
 
@@ -147,10 +149,10 @@ header {
     position: absolute;
     top: 50px;
     right: 24px;
+    font-family: "adobe-handwriting-ernie", sans-serif;
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    -webkit-text-stroke: 0.3px #000000;
+    font-weight: 400;
+    letter-spacing: 0.08em;
     color: #000000;
 }
 
@@ -185,7 +187,6 @@ header {
     -webkit-text-stroke: 0.3px #000000;
     transition: color 0.15s ease;
     padding: 0 24px;
-    border-left: 1px solid #000000;
 }
 
 .filter-link:first-child {
@@ -221,7 +222,9 @@ main {
     grid-template-columns: repeat(4, 1fr);
     gap: 5px;
     padding: 5px;
-    border: 1.5px solid #000000;
+    padding-bottom: 40vh;
+    border: none;
+    border-bottom: 1.5px solid #000000;
     background: #FFC24A;
     counter-reset: card;
 }
@@ -290,6 +293,7 @@ main {
     pointer-events: none;
     transition: opacity 0.2s ease;
     overflow-y: auto;
+    zoom: 0.65;
 }
 
 .card.flipped .detail {
@@ -300,7 +304,7 @@ main {
 .detail-row {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #000000;
+    border-bottom: 1.5px solid #000000;
     padding: 8px 16px;
     gap: 16px;
     flex-shrink: 0;
@@ -361,8 +365,8 @@ main {
 }
 
 .modal {
-    width: 75vw;
-    height: 70vh;
+    width: 55vw;
+    height: 55vh;
     display: flex;
     flex-direction: row;
     border: 1px solid #000000;
@@ -495,7 +499,7 @@ main {
     outline: none;
     color: #000000;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.09em;
     width: 100%;
@@ -522,7 +526,7 @@ select.form-input {
 
 .custom-select-value {
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .custom-select-trigger {
@@ -532,7 +536,7 @@ select.form-input {
     height: 36px;
     line-height: 36px;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     color: #000000;
 }
 
@@ -541,7 +545,7 @@ select.form-input {
     width: 6px;
     height: 6px;
     border-right: 0.5px solid #000000;
-    border-bottom: 0.5px solid #000000;
+    border-bottom: 1.5px solid #000000;
     transform: rotate(45deg);
     margin-bottom: 4px;
     flex-shrink: 0;
@@ -570,9 +574,9 @@ select.form-input {
 .custom-select-option {
     padding: 5px 12px;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     color: #000000;
-    border-bottom: 1px solid #000000;
+    border-bottom: 1.5px solid #000000;
     letter-spacing: 0.05em;
 }
 

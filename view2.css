@@ -1,3 +1,7 @@
+html {
+    zoom: 1.5;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,15 +15,17 @@
 body {
     background-color: #FFC24A;
     color: #000000;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
     letter-spacing: 0.05em;
 }
 
 header {
     background-color: #FFC24A;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-bottom: 1.5px solid #000000;
 }
 
 .header-inner {
@@ -46,26 +52,23 @@ header {
     position: absolute;
     top: 50px;
     left: 24px;
+    font-family: "adobe-handwriting-ernie", sans-serif;
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    -webkit-text-stroke: 0.3px #000000;
+    font-weight: 400;
+    letter-spacing: 0.08em;
     color: #000000;
     text-decoration: none;
 }
 
-.grid-view-link:hover {
-    font-style: italic;
-}
 
 .about-link {
     position: absolute;
     top: 50px;
     right: 24px;
+    font-family: "adobe-handwriting-ernie", sans-serif;
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    -webkit-text-stroke: 0.3px #000000;
+    font-weight: 400;
+    letter-spacing: 0.08em;
     color: #000000;
 }
 
@@ -80,10 +83,9 @@ header {
     color: #000000;
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.08em;
     -webkit-text-stroke: 0.3px #000000;
     padding: 0 24px;
-    border-left: 1px solid #000000;
 }
 
 .filter-link:first-child {
@@ -101,12 +103,13 @@ header {
 }
 
 main {
-    flex: 1;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
 }
 
 .gallery-center {
@@ -149,7 +152,7 @@ main {
 .detail-row {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #000000;
+    border-bottom: 1.5px solid #000000;
     padding: 8px 16px;
     gap: 16px;
     flex-shrink: 0;
@@ -164,7 +167,7 @@ main {
 .detail-label {
     font-size: 9px;
     font-weight: 900;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.08em;
     color: #000000;
     white-space: nowrap;
     min-width: 90px;
@@ -190,6 +193,10 @@ main {
     line-height: 1;
 }
 
-
 .nav-left  { left: 18vw; }
 .nav-right { right: 18vw; }
+
+#scroll-spacer {
+    height: 2000px;
+    pointer-events: none;
+}
