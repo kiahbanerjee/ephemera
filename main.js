@@ -310,13 +310,17 @@ const mainScrollEl  = document.querySelector('main');
 const compactDist   = 300;
 
 mainScrollEl.addEventListener('scroll', () => {
+    const maxScroll = mainScrollEl.scrollHeight - mainScrollEl.clientHeight;
+    const past70 = mainScrollEl.scrollTop >= maxScroll * 0.7;
+    siteTitle.classList.toggle('scroll-hidden', past70);
+
     const p = Math.min(mainScrollEl.scrollTop / compactDist, 1);
     headerInnerEl.style.height        = (30 - 18 * p) + 'vh';
     headerInnerEl.style.paddingTop    = (50 - 38 * p) + 'px';
     headerInnerEl.style.paddingBottom = (28 - 22 * p) + 'px';
     headerInnerEl.style.gap           = (20 - 14 * p) + 'px';
     if (siteTitle.style.opacity !== '0') {
-        siteTitle.style.fontSize = (90 - 50 * p) + 'px';
+        siteTitle.style.fontSize = (120 - 80 * p) + 'px';
     }
     document.querySelectorAll('.filter-link').forEach(l => l.style.fontSize = (12 - 4 * p) + 'px');
     document.querySelectorAll('.gallery-view-link, .about-link').forEach(l => { l.style.fontSize = (12 - 2 * p) + 'px'; l.style.top = (50 - 38 * p) + 'px'; });

@@ -13,15 +13,18 @@
             <a href="index.html?skip=1" class="grid-view-link">Grid View</a>
             <span class="about-link">About</span>
             <h1 class="site-title">NYC EPHEMERA</h1>
-            <nav class="filters">
-                <a href="#" class="filter-link active" data-filter="ALL">ALL</a>
-                <a href="#" class="filter-link" data-filter="POSTCARD">POSTCARD</a>
-                <a href="#" class="filter-link" data-filter="MATCHBOX">MATCHBOX</a>
-                <a href="#" class="filter-link" data-filter="STICKER">STICKER</a>
-                <a href="#" class="filter-link" data-filter="OTHER">OTHER</a>
-            </nav>
         </div>
     </header>
+
+    <nav class="filters">
+        <a href="#" class="filter-link active" data-filter="ALL">ALL</a>
+        <a href="#" class="filter-link" data-filter="POSTCARD">POSTCARD</a>
+        <a href="#" class="filter-link" data-filter="MATCHBOX">MATCHBOX</a>
+        <a href="#" class="filter-link" data-filter="STICKER">STICKER</a>
+        <a href="#" class="filter-link" data-filter="OTHER">OTHER</a>
+    </nav>
+
+    <div id="gallery-cursor"></div>
 
     <main>
         <button class="nav-arrow nav-left" id="nav-left">&#8249;</button>
@@ -37,8 +40,6 @@
         </div>
         <button class="nav-arrow nav-right" id="nav-right">&#8250;</button>
     </main>
-
-    <div id="scroll-spacer"></div>
 
     <script>
         const hardcoded = [
@@ -152,32 +153,34 @@
         show(0);
         loadSheetImages();
 
-        // Scroll-driven compact header
-        const headerEl    = document.querySelector('header');
-        const headerInner = document.querySelector('.header-inner');
-        const siteTitleEl = document.querySelector('.site-title');
-        const mainEl      = document.querySelector('main');
-        const maxScroll   = 400;
+        const headerEl = document.querySelector('header');
+        const mainEl   = document.querySelector('main');
+        mainEl.style.top = headerEl.offsetHeight + 'px';
 
-        function positionMain() {
-            mainEl.style.top = headerEl.offsetHeight + 'px';
-        }
-        positionMain();
+        // Custom cursor + click navigation
+        const galleryCursor = document.getElementById('gallery-cursor');
+        const zoom = () => parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
 
-        function updateLayout() {
-            const p = Math.min(window.scrollY / maxScroll, 1);
-            headerInner.style.paddingTop    = (50 - 38 * p) + 'px';
-            headerInner.style.paddingBottom = (28 - 22 * p) + 'px';
-            headerInner.style.gap           = (20 - 14 * p) + 'px';
-            siteTitleEl.style.fontSize      = (90 - 50 * p) + 'px';
-            galleryImg.style.maxHeight      = (58 + 30 * p) + 'vh';
-            galleryImg.style.maxWidth       = (55 + 35 * p) + 'vw';
-            document.querySelectorAll('.filter-link').forEach(l => l.style.fontSize = (12 - 4 * p) + 'px');
-            document.querySelectorAll('.grid-view-link, .about-link').forEach(l => l.style.fontSize = (12 - 2 * p) + 'px');
-            positionMain();
-        }
+        mainEl.addEventListener('mousemove', e => {
+            const z = zoom();
+            galleryCursor.style.display = 'block';
+            galleryCursor.style.left = (e.clientX / z) + 'px';
+            galleryCursor.style.top  = (e.clientY / z) + 'px';
+            galleryCursor.textContent = e.clientX > window.innerWidth / 2 ? 'next' : 'back';
+        });
 
-        window.addEventListener('scroll', updateLayout);
+        mainEl.addEventListener('mouseleave', () => {
+            galleryCursor.style.display = 'none';
+        });
+
+        mainEl.addEventListener('click', e => {
+            if (detailOpen) return;
+            if (e.clientX > window.innerWidth / 2) {
+                show(currentIndex + 1);
+            } else {
+                show(currentIndex - 1);
+            }
+        });
     </script>
 </body>
 </html>

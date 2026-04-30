@@ -9,7 +9,6 @@ html {
     font-family: "babylon-nouveau", sans-serif;
     font-weight: 400;
     font-style: normal;
-    cursor: url('metrocard-cursor.png'), default !important;
 }
 
 body {
@@ -95,7 +94,6 @@ header {
     border-left: none;
     border-radius: 0 12px 12px 0;
     padding: 20px 8px;
-    cursor: url('metrocard-cursor.png'), default !important;
     flex-shrink: 0;
     width: 28px;
     margin-top: 20px;
@@ -109,7 +107,6 @@ header {
 }
 
 #about-panel, #about-panel * {
-    cursor: url('metrocard-cursor.png'), default !important;
     user-select: none;
 }
 
@@ -161,13 +158,24 @@ header {
     font-weight: 500;
     font-style: normal;
     color: #000000;
-    font-size: 90px;
+    font-size: 120px;
     transition: filter 4s ease, opacity 4s ease;
 }
 
 .site-title:hover {
     filter: blur(10px);
     opacity: 0;
+}
+
+.site-title.scroll-hidden {
+    filter: blur(14px);
+    opacity: 0;
+    transition: filter 5s ease, opacity 5s ease;
+}
+
+.site-title.scroll-hidden:hover {
+    filter: blur(0px);
+    opacity: 1;
 }
 
 /* ── Filter nav ── */
@@ -181,7 +189,7 @@ header {
 .filter-link {
     text-decoration: none;
     color: #000000;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.16em;
     -webkit-text-stroke: 0.3px #000000;
@@ -191,7 +199,6 @@ header {
 
 .filter-link:first-child {
     border-left: none;
-    padding-left: 0;
 }
 
 .filter-link:hover {
@@ -248,7 +255,7 @@ main {
     position: absolute;
     top: 10px;
     left: 12px;
-    font-size: 10px;
+    font-size: 15px;
     font-weight: 700;
     color: #000000;
     letter-spacing: 0.09em;
@@ -331,6 +338,7 @@ main {
     font-family: "adobe-handwriting-ernie", sans-serif;
     font-weight: 50;
     font-style: normal;
+    font-size: 13px;
     color: #000000;
     line-height: 1.5;
 }
@@ -342,6 +350,7 @@ main {
     color: #000000;
     transition: color 0.15s ease;
     line-height: 1;
+
 }
 
 /* ── Modal ── */
@@ -499,7 +508,7 @@ main {
     outline: none;
     color: #000000;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.09em;
     width: 100%;
@@ -526,7 +535,7 @@ select.form-input {
 
 .custom-select-value {
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 14px;
+    font-size: 11px;
 }
 
 .custom-select-trigger {
@@ -536,7 +545,7 @@ select.form-input {
     height: 36px;
     line-height: 36px;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 14px;
+    font-size: 11px;
     color: #000000;
 }
 
@@ -574,7 +583,7 @@ select.form-input {
 .custom-select-option {
     padding: 5px 12px;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 14px;
+    font-size: 11px;
     color: #000000;
     border-bottom: 1.5px solid #000000;
     letter-spacing: 0.05em;
