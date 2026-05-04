@@ -70,9 +70,9 @@ header {
     top: 50%;
     transform: translateY(-50%);
     right: 24px;
-    font-family: "adobe-handwriting-ernie", sans-serif;
+    font-family: "meursault-variable", serif;
+    font-variation-settings: "wdth" 1, "wght" 100;
     font-size: 12px;
-    font-weight: 400;
     letter-spacing: 0.08em;
     color: #000000;
 }
