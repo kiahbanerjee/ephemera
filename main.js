@@ -1,5 +1,22 @@
 
 
+// Heavy smooth scroll
+let targetY = window.scrollY;
+let currentY = window.scrollY;
+const scrollEase = 0.055;
+
+window.addEventListener('wheel', e => {
+    e.preventDefault();
+    targetY += e.deltaY;
+    targetY = Math.max(0, targetY);
+}, { passive: false });
+
+(function smoothLoop() {
+    currentY += (targetY - currentY) * scrollEase;
+    window.scrollTo(0, currentY);
+    requestAnimationFrame(smoothLoop);
+})();
+
 // Fix splash height for zoom: 1.5
 const zoom = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
 document.documentElement.style.setProperty('--splash-height', (window.innerHeight / zoom) + 'px');
@@ -22,20 +39,51 @@ document.querySelectorAll('.filter-link').forEach(link => {
 });
 
 
+// Random placement of splash images
+(function placeSplashImages() {
+    const loading = document.getElementById('loading');
+    const imgs = Array.from(document.querySelectorAll('.splash-img'));
+    const W = loading.offsetWidth;
+    const H = loading.offsetHeight;
+    const imgW = 80, imgH = 80, titleH = 130;
+
+    // Shuffle images so order changes each load
+    imgs.sort(() => Math.random() - 0.5);
+
+    // Divide into a 3×2 grid of zones, pick random spot within each
+    const cols = 3, rows = 2;
+    const zoneW = W / cols, zoneH = (H - titleH) / rows;
+    const zones = [];
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            zones.push({ x: c * zoneW, y: r * zoneH });
+
+    zones.sort(() => Math.random() - 0.5);
+
+    imgs.forEach((img, i) => {
+        const zone = zones[i % zones.length];
+        const x = zone.x + 20 + Math.random() * (zoneW - imgW - 40);
+        const y = zone.y + 20 + Math.random() * (zoneH - imgH - 20);
+        img.style.left = x + 'px';
+        img.style.top  = y + 'px';
+        img.style.animationDelay = (i * 1.5 + Math.random() * 0.5) + 's';
+    });
+})();
+
+// Invert header when near top (splash visible)
+const headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+    const z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+    const splashH = window.innerHeight / z;
+    headerEl.classList.toggle('inverted', window.scrollY >= splashH);
+});
+
 // Parallax title on splash
 const loadingTitle = document.getElementById('loading-title');
 window.addEventListener('scroll', () => {
     loadingTitle.style.transform = `translateY(-${window.scrollY * 0.35}px)`;
 });
 
-// Back to top button
-const backToTop = document.getElementById('back-to-top');
-window.addEventListener('scroll', () => {
-    backToTop.classList.toggle('visible', window.scrollY > window.innerHeight + 200);
-});
-backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-});
 
 // Image preview in modal
 document.getElementById('form-image').addEventListener('change', function() {
