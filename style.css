@@ -167,6 +167,7 @@ header.inverted .filter-link.active {
     letter-spacing: 0.08em;
     color: #000000;
     text-transform: uppercase;
+    text-decoration: none;
 }
 
 .site-title {
