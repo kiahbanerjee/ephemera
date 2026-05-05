@@ -87,6 +87,14 @@ header {
     padding-top: 36px;
 }
 
+.drop-cap {
+    font-size: 2.2em;
+    line-height: 0.8;
+    display: inline-block;
+    vertical-align: -0.05em;
+    font-variation-settings: "wdth" 100, "wght" 200;
+}
+
 .pull-word {
     font-variation-settings: "wdth" 100, "wght" 500;
     font-size: 13px;
@@ -130,6 +138,7 @@ header {
 }
 
 .content-inner p {
+    filter: url(#ink-filter);
     font-family: "meursault-variable", serif;
     font-variation-settings: "wdth" 100, "wght" 300;
     font-size: 11px;
