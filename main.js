@@ -239,12 +239,8 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
 
     buildDetail(card);
     closeModal();
-    const successOverlay = document.getElementById('success-overlay');
-    successOverlay.classList.add('open');
-    setTimeout(() => successOverlay.classList.remove('open'), 2000);
     } catch (err) {
         console.error('Submission error:', err);
-        alert('Submission failed: ' + err.message);
     } finally {
         submitBtn.textContent = 'SUBMIT';
         submitBtn.disabled = false;
@@ -284,6 +280,21 @@ async function loadSavedCards() {
     });
 }
 
+function attachNoteTooltip(card, enlarged = false) {
+    if (!card.dataset.note) return;
+    const tooltip = document.createElement('div');
+    tooltip.className = enlarged ? 'card-note-tooltip card-note-tooltip-lg' : 'card-note-tooltip';
+    tooltip.textContent = card.dataset.note;
+    document.body.appendChild(tooltip);
+    const z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+    card.addEventListener('mouseenter', () => tooltip.style.opacity = '1');
+    card.addEventListener('mouseleave', () => tooltip.style.opacity = '0');
+    card.addEventListener('mousemove', e => {
+        tooltip.style.left = (e.clientX / z + 12) + 'px';
+        tooltip.style.top  = (e.clientY / z + 12) + 'px';
+    });
+}
+
 function buildDetail(card) {
     const category = document.createElement('span');
     category.className = 'card-category';
@@ -301,22 +312,63 @@ function buildDetail(card) {
     card.appendChild(location);
     card.appendChild(price);
 
-    if (card.dataset.note) {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'card-note-tooltip';
-        tooltip.textContent = card.dataset.note;
-        document.body.appendChild(tooltip);
-
-        const z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
-        card.addEventListener('mouseenter', () => tooltip.style.opacity = '1');
-        card.addEventListener('mouseleave', () => tooltip.style.opacity = '0');
-        card.addEventListener('mousemove', e => {
-            tooltip.style.left = (e.clientX / z + 12) + 'px';
-            tooltip.style.top  = (e.clientY / z + 12) + 'px';
-        });
-    }
+    attachNoteTooltip(card);
 }
 
 document.querySelectorAll('.card:not(#submit-card)').forEach(card => buildDetail(card));
 loadSavedCards();
+
+// Lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxContainer = document.getElementById('lightbox-card-container');
+let activeCard = null;
+
+document.addEventListener('click', e => {
+    const card = e.target.closest('.card:not(.card-submit):not(.lightbox-clone)');
+    if (!card) return;
+
+    activeCard = card;
+    card.style.transition = 'filter 0.8s ease, opacity 0.8s ease';
+    card.style.filter = 'blur(8px)';
+    card.style.opacity = '0';
+
+    setTimeout(() => {
+        const allCards = Array.from(document.querySelectorAll('.grid .card:not(.card-submit)'));
+        const cardIndex = allCards.indexOf(card) + 1;
+        lightboxContainer.innerHTML = '';
+        const clone = card.cloneNode(true);
+        clone.classList.add('lightbox-clone');
+        clone.style.counterReset = `card ${cardIndex - 1}`;
+        clone.style.filter = 'blur(12px)';
+        clone.style.opacity = '0';
+        clone.style.transition = 'none';
+        lightboxContainer.appendChild(clone);
+        attachNoteTooltip(clone, true);
+        lightbox.classList.add('open');
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            clone.style.transition = 'filter 1s ease, opacity 1s ease';
+            clone.style.filter = 'blur(0px)';
+            clone.style.opacity = '1';
+        }));
+    }, 800);
+});
+
+function closeLightbox() {
+    lightbox.classList.remove('open');
+    if (activeCard) {
+        activeCard.style.transition = 'filter 0.3s ease, opacity 0.3s ease';
+        activeCard.style.filter = '';
+        activeCard.style.opacity = '';
+        activeCard = null;
+    }
+}
+
+lightbox.addEventListener('click', e => {
+    if (!lightboxContainer.contains(e.target)) closeLightbox();
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+});
 
