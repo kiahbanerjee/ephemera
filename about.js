@@ -20,6 +20,29 @@ window.addEventListener('wheel', e => {
     requestAnimationFrame(smoothLoop);
 })();
 
+// Wrap every word in hover-word spans (text nodes only, preserves existing HTML)
+document.querySelectorAll('.content-inner p').forEach(p => {
+    const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    let node;
+    while (node = walker.nextNode()) textNodes.push(node);
+    textNodes.forEach(textNode => {
+        const parts = textNode.textContent.split(/(\s+)/);
+        const frag = document.createDocumentFragment();
+        parts.forEach(part => {
+            if (!part || /^\s+$/.test(part)) {
+                frag.appendChild(document.createTextNode(part));
+            } else {
+                const span = document.createElement('span');
+                span.className = 'hover-word';
+                span.textContent = part;
+                frag.appendChild(span);
+            }
+        });
+        textNode.parentNode.replaceChild(frag, textNode);
+    });
+});
+
 // Parallax title
 const aboutTitle = document.getElementById('about-title');
 window.addEventListener('scroll', () => {
