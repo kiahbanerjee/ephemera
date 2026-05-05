@@ -12,6 +12,8 @@ window.addEventListener('wheel', e => {
 }, { passive: false });
 
 (function smoothLoop() {
+    const maxScroll = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    targetY = Math.min(targetY, maxScroll);
     currentY += (targetY - currentY) * scrollEase;
     window.scrollTo(0, currentY);
     requestAnimationFrame(smoothLoop);
@@ -100,6 +102,19 @@ document.getElementById('form-image').addEventListener('change', function() {
         }
         preview.src = ev.target.result;
         document.getElementById('upload-label').style.display = 'none';
+
+        let changeBtn = left.querySelector('.change-upload-btn');
+        if (!changeBtn) {
+            changeBtn = document.createElement('button');
+            changeBtn.type = 'button';
+            changeBtn.className = 'change-upload-btn';
+            changeBtn.textContent = 'CHANGE UPLOAD';
+            changeBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                document.getElementById('form-image').click();
+            });
+            left.appendChild(changeBtn);
+        }
     };
     reader.readAsDataURL(file);
 });
@@ -135,6 +150,8 @@ function closeModal() {
     customSelect.classList.remove('open');
     const preview = document.querySelector('.upload-preview');
     if (preview) preview.remove();
+    const changeBtn = document.querySelector('.change-upload-btn');
+    if (changeBtn) changeBtn.remove();
     const label = document.querySelector('.upload-label');
     if (label) label.style.display = '';
 }
@@ -153,19 +170,37 @@ document.getElementById('modal-close').addEventListener('click', e => {
 
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6L5uT-6Gip9CiqYTwvqFQl39gO0c0my1jPpLdZF4m5NWgBJo2i_gL69aXaGpYx_7G3w/exec';
 
+function showFormToast(msg) {
+    let toast = document.getElementById('form-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'form-toast';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('visible');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('visible'), 2500);
+}
+
 document.getElementById('submit-form').addEventListener('submit', async e => {
     e.preventDefault();
+
+    const category = document.getElementById('form-category').value;
+    const location = document.getElementById('form-location').value;
+    const price = document.getElementById('form-price').value;
+
+    const file = document.getElementById('form-image').files[0];
+    if (!category || !location || !price || !file) {
+        showFormToast('pls fill <3');
+        return;
+    }
 
     const submitBtn = document.querySelector('.form-submit');
     submitBtn.textContent = 'SUBMITTING...';
     submitBtn.disabled = true;
 
     try {
-    const file = document.getElementById('form-image').files[0];
-    const category = document.getElementById('form-category').value;
-    const location = document.getElementById('form-location').value;
-    const price = document.getElementById('form-price').value || 'NA';
-    const email = document.getElementById('form-email').value;
     const note = document.getElementById('form-note').value;
 
     const imageBase64 = await new Promise((resolve, reject) => {
@@ -179,7 +214,7 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
         method: 'POST',
         mode: 'no-cors',
         body: JSON.stringify({
-            category, location, price, email, note,
+            category, location, price, note,
             imageBase64,
             imageMimeType: 'image/jpeg',
             imageName: file.name
@@ -191,7 +226,7 @@ document.getElementById('submit-form').addEventListener('submit', async e => {
     card.dataset.object = category;
     card.dataset.location = location;
     card.dataset.price = price;
-    card.dataset.by = email || 'Community';
+    card.dataset.by = 'Community';
     card.dataset.note = note;
 
     const img = document.createElement('img');
@@ -265,6 +300,21 @@ function buildDetail(card) {
     card.appendChild(category);
     card.appendChild(location);
     card.appendChild(price);
+
+    if (card.dataset.note) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'card-note-tooltip';
+        tooltip.textContent = card.dataset.note;
+        document.body.appendChild(tooltip);
+
+        const z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+        card.addEventListener('mouseenter', () => tooltip.style.opacity = '1');
+        card.addEventListener('mouseleave', () => tooltip.style.opacity = '0');
+        card.addEventListener('mousemove', e => {
+            tooltip.style.left = (e.clientX / z + 12) + 'px';
+            tooltip.style.top  = (e.clientY / z + 12) + 'px';
+        });
+    }
 }
 
 document.querySelectorAll('.card:not(#submit-card)').forEach(card => buildDetail(card));

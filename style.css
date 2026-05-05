@@ -18,6 +18,13 @@ body {
     overflow-x: hidden;
 }
 
+.filter-link, .about-link,
+.card::before,
+.form-label, .form-label-opt, .form-submit, .upload-title,
+.modal-divider, .change-upload-btn {
+    filter: url(#ink-filter);
+}
+
 .site-title, #loading-title {
     letter-spacing: normal;
 }
@@ -57,7 +64,7 @@ header.inverted .about-link {
 }
 
 header.inverted .filter-link.active {
-    text-decoration-color: #FFC24A;
+    outline-color: #FFC24A;
 }
 
 .header-inner {
@@ -218,8 +225,9 @@ header.inverted .filter-link.active {
 
 .filter-link.active {
     color: #000000;
-    text-decoration: underline double #000000;
-    text-underline-offset: 4px;
+    text-decoration: none;
+    outline: 1px solid #000000;
+    padding: 3px 14px;
 }
 
 /* ── cards ── */
@@ -252,7 +260,7 @@ main {
 
 .card {
     background-color: #FFC24A;
-    border: 1px solid #000000;
+    border: none;
     padding: 12px;
     display: flex;
     flex-direction: column;
@@ -262,7 +270,16 @@ main {
     position: relative;
     counter-increment: card;
     transition: opacity 0.15s ease;
-    overflow: hidden;
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid #000000;
+    filter: url(#ink-filter);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .card::before {
@@ -271,7 +288,7 @@ main {
     top: 10px;
     left: 12px;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 400;
     color: #000000;
 }
@@ -291,6 +308,44 @@ main {
     max-height: 75%;
     object-fit: contain;
     display: block;
+}
+
+.card-note-tooltip {
+    position: fixed;
+    background: #FFC24A;
+    border: none;
+    padding: 6px 10px;
+    font-family: "adobe-handwriting-ernie", sans-serif;
+    font-size: 9px;
+    color: #000000;
+    max-width: 140px;
+    line-height: 1.6;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 200;
+}
+
+.card-note-tooltip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid #000000;
+    filter: url(#ink-filter);
+    pointer-events: none;
+}
+
+.card-metro img {
+    transition: filter 4s ease, opacity 4s ease;
+}
+
+.card-metro:hover img {
+    filter: blur(10px);
+    opacity: 0;
+}
+
+.card-metro img {
+    filter: blur(0px);
 }
 
 .card-category {
@@ -383,10 +438,10 @@ main {
     background: none;
     border: 1px solid transparent;
     color: #000000;
+    font-family: "meursault-variable", serif;
+    font-variation-settings: "wdth" 100, "wght" 300;
     font-size: 10px;
-    font-weight: 700;
     letter-spacing: 0.24em;
-    -webkit-text-stroke: 0.3px #000000;
     padding: 10px 0;
     margin-top: 8px;
     transition: border-color 0.15s ease;
@@ -422,6 +477,45 @@ main {
     padding: 24px;
 }
 
+#form-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #000000;
+    color: #FFC24A;
+    font-family: "meursault-variable", serif;
+    font-variation-settings: "wdth" 100, "wght" 300;
+    font-size: 10px;
+    letter-spacing: 0.19em;
+    padding: 8px 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+#form-toast.visible {
+    opacity: 1;
+}
+
+.change-upload-btn {
+    position: absolute;
+    bottom: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    font-family: "meursault-variable", serif;
+    font-variation-settings: "wdth" 100, "wght" 300;
+    font-size: 8px;
+    letter-spacing: 0.19em;
+    color: #000000;
+    cursor: pointer;
+    z-index: 10;
+}
+
+
 .upload-label {
     display: flex;
     flex-direction: column;
@@ -433,17 +527,17 @@ main {
 
 
 .upload-title {
-    font-size: 11px;
-    font-weight: 700;
+    font-family: "meursault-variable", serif;
+    font-variation-settings: "wdth" 100, "wght" 300;
+    font-size: 10px;
     letter-spacing: 0.24em;
     color: #000000;
-    -webkit-text-stroke: 0.3px #000000;
 }
 
 /* Divider */
 .modal-divider {
-    width: 1px;
-    background: #000000;
+    width: 0;
+    border-left: 1px solid #000000;
     margin: 40px 0;
 }
 
@@ -453,8 +547,9 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 60px 80px 60px 40px;
-    gap: 20px;
+    align-items: stretch;
+    padding: 28px 40px;
+    gap: 8px;
 }
 
 .form-field {
@@ -466,14 +561,16 @@ main {
 }
 
 .form-label {
+    font-family: "meursault-variable", serif;
+    font-variation-settings: "wdth" 100, "wght" 300;
     font-size: 10px;
-    font-weight: 700;
     letter-spacing: 0.19em;
     color: #000000;
-    -webkit-text-stroke: 0.3px #000000;
 }
 
 .form-label-opt {
+    font-family: "meursault-variable", serif;
+    font-variation-settings: "wdth" 100, "wght" 300;
     color: #000000;
     font-size: 10px;
     letter-spacing: 0.16em;
@@ -485,7 +582,7 @@ main {
     outline: none;
     color: #000000;
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 400;
     letter-spacing: 0.09em;
     width: 100%;
@@ -512,7 +609,7 @@ select.form-input {
 
 .custom-select-value {
     font-family: "adobe-handwriting-ernie", sans-serif;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .custom-select-trigger {
@@ -526,21 +623,6 @@ select.form-input {
     color: #000000;
 }
 
-.custom-select-trigger::after {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-right: 0.5px solid #000000;
-    border-bottom: 1.5px solid #000000;
-    transform: rotate(45deg);
-    margin-bottom: 4px;
-    flex-shrink: 0;
-}
-
-.custom-select.open .custom-select-trigger::after {
-    transform: rotate(-135deg);
-    margin-bottom: -4px;
-}
 
 .custom-select-options {
     display: none;
@@ -636,8 +718,16 @@ select.form-input {
     color: #FFC24A;
     white-space: nowrap;
     opacity: 1;
-    pointer-events: none;
+    pointer-events: auto;
     letter-spacing: normal;
+    filter: blur(0px);
+    transition: filter 8s ease, opacity 8s ease;
+    cursor: default;
+}
+
+#loading-title:hover {
+    filter: blur(10px);
+    opacity: 0;
 }
 
 @keyframes titleBlurIn {

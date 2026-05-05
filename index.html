@@ -13,6 +13,12 @@
 <link rel="stylesheet" href="https://use.typekit.net/sfz3pyh.css">
 </head>
 <body>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <filter id="ink-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.1" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+</svg>
 <div id="loading">
     <div id="loading-images">
         <img class="splash-img" src="manhatta 3.jpg" alt="">
@@ -57,7 +63,7 @@
             <div class="card" data-object="Matchbox" data-location="The Corner Store" data-price="free" data-by="Community" data-note="I love the font, and just the overall design of the place and vibe."><img src="The Corner Store.jpg" alt="The Corner Store"></div>
             <div class="card" data-object="Postcard" data-location="Polo Bar" data-price="free" data-by="kiah.banerjee06@gmail.com" data-note="Try the burgers!"><img src="polo bar.jpg" alt="Polo Bar"></div>
             <div class="card" data-object="Matchbox" data-location="Deux Chats" data-price="free" data-by="Community" data-note="Cute illustration."><img src="deux chats.jpg" alt="Deux Chats"></div>
-            <div class="card" data-object="Other" data-location="New York City" data-price="$1" data-by="Community" data-note="we miss you :("><img src="metro card.png" alt="Metro Card"></div>
+            <div class="card card-metro" data-object="Other" data-location="New York City" data-price="$1" data-by="Community" data-note="we miss you :("><img src="metro card.png" alt="Metro Card"></div>
             <div class="card" data-object="Postcard" data-location="The Standard" data-price="free" data-by="Community" data-note=""><img src="The Standard.jpg" alt="The Standard"></div>
             <div class="card" data-object="Postcard" data-location="Manhatta" data-price="free" data-by="kiah.banerjee06@gmail.com" data-note=""><img src="manhatta 3.jpg" alt="Manhatta 3"></div>
             <div class="card" data-object="Matchbox" data-location="Bar Madonna" data-price="free" data-by="Community" data-note=""><img src="bar madonna.jpg" alt="Bar Madonna"></div>
@@ -74,7 +80,7 @@
         <button type="button" id="modal-close">✕</button>
 
         <div class="modal-left">
-            <input type="file" accept="image/*" id="form-image" required>
+            <input type="file" accept="image/*" id="form-image">
             <label for="form-image" class="upload-label" id="upload-label">
                 <span class="upload-title">UPLOAD IMAGE</span>
             </label>
@@ -85,7 +91,7 @@
         <div class="modal-right">
             <div class="form-field">
                 <label class="form-label">CATEGORY:</label>
-                <select class="form-input" id="form-category" required style="display:none">
+                <select class="form-input" id="form-category" style="display:none">
                     <option value=""></option>
                     <option value="Postcard">Postcard</option>
                     <option value="Matchbox">Matchbox</option>
@@ -104,18 +110,14 @@
             </div>
             <div class="form-field">
                 <label class="form-label">LOCATION:</label>
-                <input type="text" class="form-input" id="form-location" required>
+                <input type="text" class="form-input" id="form-location">
             </div>
             <div class="form-field">
                 <label class="form-label">PRICE:</label>
                 <input type="text" class="form-input" id="form-price">
             </div>
             <div class="form-field">
-                <label class="form-label">YOUR EMAIL <span class="form-label-opt">(OPTIONAL):</span></label>
-                <input type="email" class="form-input" id="form-email">
-            </div>
-            <div class="form-field">
-                <label class="form-label">A NOTE:</label>
+                <label class="form-label">A NOTE <span class="form-label-opt">(IF YOU WANT &lt;3):</span></label>
                 <input type="text" class="form-input" id="form-note">
             </div>
             <button type="submit" class="form-submit">SUBMIT</button>
